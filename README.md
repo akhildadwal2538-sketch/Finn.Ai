@@ -32,14 +32,11 @@ npm run dev:lan
 
 ## Deploy to Vercel without an LLM
 
-The Vercel Hobby plan is suitable for a personal prototype and does not require billing details unless you opt into a paid plan. Deploy the API and frontend as two Vercel projects from this repository:
+The root [`vercel.json`](vercel.json) deploys the Next.js frontend and FastAPI backend as services in one Vercel project, with `/api/*` routed to FastAPI and all other paths to Next.js. Import this repository into Vercel; its GitHub App needs access to the `Finn.Ai` repository to deploy commits.
 
-1. Import the repository and set the API project's **Root Directory** to `backend`. Vercel detects the FastAPI app through `backend/index.py` and installs `backend/requirements.txt`.
-2. Import the same repository again as the frontend project, keeping the repository root as its **Root Directory**. Vercel detects Next.js.
-3. In the frontend project's Production environment variables, set `FINN_BACKEND_URL` to the API project's HTTPS URL, with no trailing slash. Redeploy the frontend; its existing `/api/*` rewrite proxies calls to FastAPI.
-4. Open the frontend project's Vercel URL on a phone.
+Open the resulting Vercel project URL on a phone. No LLM secret is needed: the research assistant remains in evidence-only mode until credentials are configured.
 
-No LLM secret is needed. The research assistant remains in evidence-only mode until credentials are configured. Vercel functions use a writable `/tmp` SQLite database per instance; portfolio edits, alerts, and uploaded/indexed documents are temporary and may not be shared between function instances or survive a cold start. The bundled demo portfolio remains available. Use a durable database before relying on saved user data.
+Vercel functions use a writable `/tmp` SQLite database per instance; portfolio edits, alerts, and uploaded/indexed documents are temporary and may not be shared between function instances or survive a cold start. The bundled demo portfolio remains available. Use a durable database before relying on saved user data.
 
 ## Deploy to Render
 
@@ -106,6 +103,6 @@ The production build, TypeScript typecheck, and backend unit/API tests cover fil
 
 ## Build history and submission note
 
-The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. The Vercel two-project setup and Render Blueprint are documented above.
+The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. The Vercel multi-service configuration and Render Blueprint are documented above.
 
 **Covering note:** See [`docs/covering-note.md`](docs/covering-note.md) for a ready-to-edit submission draft.
