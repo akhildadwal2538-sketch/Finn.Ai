@@ -13,8 +13,12 @@ ROOT = Path(__file__).resolve().parent.parent
 DATABASE_URL = os.getenv("FINN_DATABASE_URL", "sqlite:///./data/finn.db")
 if not DATABASE_URL.startswith("sqlite:///"):
     raise RuntimeError("FINN_DATABASE_URL currently supports SQLite paths only (sqlite:///...)")
-DB_PATH = Path(DATABASE_URL.removeprefix("sqlite:///"))
-if not DB_PATH.is_absolute(): DB_PATH = ROOT / DB_PATH
+if os.getenv("VERCEL") == "1":
+    # Serverless function bundles are read-only; /tmp is writable but instance-local.
+    DB_PATH = Path(os.getenv("FINN_DATABASE_PATH", "/tmp/finn.db"))
+else:
+    DB_PATH = Path(DATABASE_URL.removeprefix("sqlite:///"))
+    if not DB_PATH.is_absolute(): DB_PATH = ROOT / DB_PATH
 DEMO = json.loads((ROOT / "data/demo.json").read_text())
 CATEGORIES = ["results","M&A","fund_raise","management_change","litigation","insider_trading","earnings_call","investor_meetings","credit_rating","dividend","bonus_split","capex","press_release","postal_ballot","agm_egm","pledging","unclassified"]
 

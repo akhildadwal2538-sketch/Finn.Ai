@@ -10,7 +10,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 load_dotenv(Path(__file__).resolve().parent.parent / ".env.local", override=False)
 
-from .services.core import (portfolio,market,companies,announcements,alerts,retrieval,analyst,DEMO,CATEGORIES,connect)
+try:
+    # Normal package import for local development and ASGI servers.
+    from .services.core import (portfolio,market,companies,announcements,alerts,retrieval,analyst,DEMO,CATEGORIES,connect)
+except ImportError:
+    # Vercel's Python runtime imports backend/index.py as a top-level function.
+    from services.core import (portfolio,market,companies,announcements,alerts,retrieval,analyst,DEMO,CATEGORIES,connect)
 
 app=FastAPI(title="FINN Intelligence API",version="0.1.0",description="Evidence-aware investor intelligence prototype")
 app.add_middleware(CORSMiddleware,allow_origins=["http://localhost:3000","http://127.0.0.1:3000","http://localhost:3001","http://127.0.0.1:3001"],allow_methods=["*"],allow_headers=["*"])

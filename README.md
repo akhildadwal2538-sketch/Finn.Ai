@@ -30,6 +30,17 @@ With the backend already running, start the frontend on the LAN:
 npm run dev:lan
 ```
 
+## Deploy to Vercel without an LLM
+
+The Vercel Hobby plan is suitable for a personal prototype and does not require billing details unless you opt into a paid plan. Deploy the API and frontend as two Vercel projects from this repository:
+
+1. Import the repository and set the API project's **Root Directory** to `backend`. Vercel detects the FastAPI app through `backend/index.py` and installs `backend/requirements.txt`.
+2. Import the same repository again as the frontend project, keeping the repository root as its **Root Directory**. Vercel detects Next.js.
+3. In the frontend project's Production environment variables, set `FINN_BACKEND_URL` to the API project's HTTPS URL, with no trailing slash. Redeploy the frontend; its existing `/api/*` rewrite proxies calls to FastAPI.
+4. Open the frontend project's Vercel URL on a phone.
+
+No LLM secret is needed. The research assistant remains in evidence-only mode until credentials are configured. Vercel functions use a writable `/tmp` SQLite database per instance; portfolio edits, alerts, and uploaded/indexed documents are temporary and may not be shared between function instances or survive a cold start. The bundled demo portfolio remains available. Use a durable database before relying on saved user data.
+
 ## Deploy to Render
 
 The root [`render.yaml`](render.yaml) defines two same-region services: a Next.js web service and a FastAPI service. In Render, create a new Blueprint from this GitHub repository and apply the Blueprint. The web service proxies `/api/*` requests to the backend over Render's private network.
@@ -95,6 +106,6 @@ The production build, TypeScript typecheck, and backend unit/API tests cover fil
 
 ## Build history and submission note
 
-The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. The Render Blueprint is ready to deploy from the repository.
+The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. The Vercel two-project setup and Render Blueprint are documented above.
 
 **Covering note:** See [`docs/covering-note.md`](docs/covering-note.md) for a ready-to-edit submission draft.
