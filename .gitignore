@@ -1,0 +1,15 @@
+.venv/
+node_modules/
+.next/
+out/
+dist/
+__pycache__/
+*.py[cod]
+.env
+data/*.db
+backend/data/*.db
+backend/data/uploads/
+.DS_Store
+*.tsbuildinfo
+
+.env.local
