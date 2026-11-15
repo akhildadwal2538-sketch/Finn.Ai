@@ -30,6 +30,12 @@ With the backend already running, start the frontend on the LAN:
 npm run dev:lan
 ```
 
+## Deploy to Render
+
+The root [`render.yaml`](render.yaml) defines two same-region services: a Next.js web service and a FastAPI service. In Render, create a new Blueprint from this GitHub repository and apply the Blueprint. The web service proxies `/api/*` requests to the backend over Render's private network.
+
+Both services use Render's free compute plan. The backend stores its SQLite database on the service filesystem, which is ephemeral on this plan; portfolio edits and uploaded/indexed documents can reset after a restart or redeploy. Use a persistent disk or migrate the backend database to managed PostgreSQL before relying on stored user data. The LLM remains unconfigured until provider credentials are added to the backend service's environment.
+
 Open `http://<computer-LAN-IP>:3001` on the phone. Find the computer's LAN IP in its network settings. Keep the phone and computer on the same Wi-Fi. The app uses the same-origin API proxy, so the phone does not try to contact its own `localhost` for API requests. This is local-network access, not a public deployment.
 
 ## Product decisions
@@ -89,6 +95,6 @@ The production build, TypeScript typecheck, and backend unit/API tests cover fil
 
 ## Build history and submission note
 
-The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. No repository has been pushed and no deployment has been made from this environment.
+The Codex conversation used to build this prototype is the AI build history; share/export this conversation alongside the repository when submitting. The Render Blueprint is ready to deploy from the repository.
 
 **Covering note:** See [`docs/covering-note.md`](docs/covering-note.md) for a ready-to-edit submission draft.
